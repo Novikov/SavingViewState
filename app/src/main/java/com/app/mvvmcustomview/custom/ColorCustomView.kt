@@ -6,7 +6,6 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import com.app.mvvmcustomview.R
 import com.app.mvvmcustomview.databinding.ColorCustomViewBinding
 import com.app.mvvmcustomview.mvvm.MvvmLinearLayout
@@ -32,10 +31,9 @@ class ColorCustomView(
 
     private fun observeLiveData(lifecycleOwner: LifecycleOwner) {
         viewModel.getLiveData().observe(
-            lifecycleOwner,
-            Observer {
-                setBackgroundColor(Color.parseColor(it))
-            }
-        )
+            lifecycleOwner
+        ) { color ->
+            color?.let { setBackgroundColor(Color.parseColor(it)) }
+        }
     }
 }
