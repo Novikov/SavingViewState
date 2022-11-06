@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.widget.LinearLayout
 import androidx.lifecycle.LifecycleOwner
 
+// Базовый класс куда вытеснена общая логика для каждой view для которой необходимо сохранять состояние
 abstract class MvvmLinearLayout<V : MvvmCustomViewState, T : MvvmCustomViewModel<V>>(
     context: Context,
     attributeSet: AttributeSet
@@ -16,9 +17,12 @@ abstract class MvvmLinearLayout<V : MvvmCustomViewState, T : MvvmCustomViewModel
         onLifecycleOwnerAttached(lifecycleOwner)
     }
 
-    override fun onSaveInstanceState() =
-        MvvmCustomViewStateWrapper(super.onSaveInstanceState(), viewModel.state)
+    // Сохранение состояния
+    override fun onSaveInstanceState(): MvvmCustomViewStateWrapper {
+        return MvvmCustomViewStateWrapper(super.onSaveInstanceState(), viewModel.state)
+    }
 
+    // Восстановление состояния
     @Suppress("UNCHECKED_CAST")
     override fun onRestoreInstanceState(state: Parcelable?) {
         if (state is MvvmCustomViewStateWrapper) {
